@@ -6,29 +6,26 @@ class Node {
     }
 }
 
-class LinkedList {
+class DoublyLinkedList {
     constructor() {
         this.head = null
         this.tail = null
         this.size = 0
     }
 
-    shift() {
-        const firstNode = this.head
-        this.head = firstNode.next
-        this.head.previous = null
-        firstNode.next = null
-        this.size--
-        return firstNode
-    }
+    append(data) {
+        const newNode = new Node(data)
 
-    pop() {
-        const lastNode = this.tail
-        this.tail = lastNode.previous
-        this.tail.next = null
-        lastNode.previous = null
-        this.size--
-        return lastNode
+        if (this.size === 0) {
+            this.head = newNode
+            this.tail = newNode
+        } else {
+            newNode.previous = this.tail
+            this.tail.next = newNode
+            this.tail = newNode
+        }
+
+        this.size++
     }
 
     prepend(data) {
@@ -46,30 +43,45 @@ class LinkedList {
         this.size++
     }
 
-    append(data) {
-        const newNode = new Node(data)
+    shift() {
+        const firstNode = this.head
 
-        if (this.size === 0) {
-            this.head = newNode
-            this.tail = newNode
+        if (this.size > 1) {
+            this.head = firstNode.next
+            this.head.previous = null
+            firstNode.next = null
         } else {
-            newNode.previous = this.tail
-            this.tail.next = newNode
-            this.tail = newNode
+            this.head = null
+            this.tail = null
         }
 
-        this.size++
+        this.size--
+
+        return firstNode
+    }
+
+    pop() {
+        const lastNode = this.tail
+
+        if (this.size > 1) {
+            this.tail = lastNode.previous
+            this.tail.next = null
+            lastNode.previous = null
+        } else {
+            this.head = null
+            this.tail = null
+        }
+
+        this.size--
+
+        return lastNode
     }
 }
 
-const linkedList = new LinkedList()
+const linkedList = new DoublyLinkedList()
 
 linkedList.append('Node 2')
-linkedList.append('Node 3')
 linkedList.prepend('Node 1')
 
-console.log(linkedList)
-console.log(linkedList.shift())
-console.log(linkedList)
 console.log(linkedList.pop())
 console.log(linkedList)
